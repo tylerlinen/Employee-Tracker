@@ -1,12 +1,21 @@
-USE  tracker_db;
+INSERT INTO employee (first_name, last_name, role_id,manager_id) VALUES ("Joey","Maine","1",null);
+INSERT INTO employee (first_name, last_name, role_id,manager_id) VALUES ("Steve","Washington","2","2");
+INSERT INTO employee (first_name, last_name,role_id,manager_id) VALUES ("Dave","Jones","3",null); 
+ 
+INSERT INTO role (title,salary,department_id) VALUES("Software Engineer", "100000","1");
+INSERT INTO role (title,salary,department_id) VALUES ("Salesperson","50000","2");
+INSERT INTO role (title,salary,department_id) VALUES ("Singer","90000","3");
+ 
+INSERT INTO department (name) VALUES ("Engineer");
+INSERT INTO department(name) VALUES ('Sales');
+INSERT INTO department (name) VALUES ('Entertainment');
+ 
 
-
-INSERT INTO department(name) VALUES ('Meeses');
-INSERT INTO department(name) VALUES ('Meeses');
-INSERT INTO department (name) VALUES ('Meeses');
-INSERT INTO employee (name) VALUES ('Meeses');
-INSERT INTO employee (name) VALUES ('Meeses');
-INSERT INTO employee (name) VALUES ('Meeses');
-INSERT INTO role (name) VALUES ('Meeses');
-INSERT INTO role (name) VALUES ('Meeses');
-INSERT INTO role (name) VALUES ('Meeses');
+    Create Table newTable as (
+SELECT
+  department.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id
+FROM role
+  INNER JOIN department
+    ON role.department_id = department.id
+  INNER JOIN employee
+    ON role.department_id = employee.role_id)

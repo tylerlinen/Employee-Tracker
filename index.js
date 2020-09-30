@@ -66,14 +66,55 @@ function runSearch() {
                     updateEmployee();
                     break;
             }
+
         });
 }
-function viewEmployee(answer){
-        var query = "SELECT position, song, year FROM top5000 WHERE ?";
-        connection.query(query, { artist: answer.artist }, function (err, res) {
-            for (var i = 0; i < res.length; i++) {
-                console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
-            }
-            runSearch();
+runSearch();
+
+function viewEmployee() {
+    var query = "SELECT first_name, last_name, title, name, salary  FROM newTable";
+    connection.query(query, function (err, res) {
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i]);
+        }
+        runSearch();
     });
 }
+
+function viewDepartment() {
+    var query = "SELECT name FROM newTable";
+    connection.query(query, function (err, res) {
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i]);
+        }
+        runSearch();
+    });
+}
+function viewRoles() {
+    var query = "SELECT title FROM newTable";
+    connection.query(query, function (err, res) {
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i]);
+        }
+        runSearch();
+    });
+}
+
+function addEmployee() {
+    inquirer
+        .prompt({
+            name: "action",
+            type: "Input",
+            message: "Enter first name",
+        })
+        .then(function (answer) {
+            var query = "INSERT INTO newTable (first_name)"
+            answer.query(query, function (err, res) {
+                for (var i = 0; i < res.length; i++) {
+                    console.log(res[i]);
+                }
+            })
+
+        });
+}
+
