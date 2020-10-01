@@ -1,28 +1,11 @@
 var mysql = require("mysql");
-var inquirer = require("inquirer");
+const DB = require("./db/db");
+const { printTable } = require("console-table-printer");
+const { prompt } =  require("inquirer");
 
-var connection = mysql.createConnection({
-    host: "localhost",
-
-
-    port: 3306,
-
-
-    user: "root",
-
-
-    password: "Pepper202532",
-    database: "tracker_db"
-});
-
-connection.connect(function (err, res) {
-    if (err) throw err;
-    console.log("running")
-});
 
 function runSearch() {
-    inquirer
-        .prompt({
+        prompt({
             name: "action",
             type: "rawlist",
             message: "What would you like to do?",
@@ -71,42 +54,30 @@ function runSearch() {
 }
 runSearch();
 
-function viewEmployee() {
-    var query = "SELECT first_name, last_name, title, name, salary  FROM newTable";
-    connection.query(query, function (err, res) {
-        for (var i = 0; i < res.length; i++) {
-            console.log(res[i]);
-        }
-        runSearch();
-    });
+async function viewEmployee() {
+   const employees =  await DB.findAllEmployees();
+   printTable(employees)
+   runSearch();
 }
 
-function viewDepartment() {
-    var query = "SELECT name FROM newTable";
-    connection.query(query, function (err, res) {
-        for (var i = 0; i < res.length; i++) {
-            console.log(res[i]);
-        }
+async function viewDepartment() {
+   const departments = await DB.findAllDepartments();
+        printTable(departments)
         runSearch();
-    });
+  
 }
-function viewRoles() {
-    var query = "SELECT title FROM newTable";
-    connection.query(query, function (err, res) {
-        for (var i = 0; i < res.length; i++) {
-            console.log(res[i]);
-        }
-        runSearch();
-    });
-}
+async function viewRoles() {
+    const roles = await DB.findAllRoles();
+         printTable(roles)
+         runSearch();
 
-function addEmployee() {
-    inquirer
-        .prompt({
-            name: "action",
+async function addEmployee() {
+   prompt([{
+            name: "firstName",
             type: "Input",
             message: "Enter first name",
-        })
+        },
+    ])
         .then(function (answer) {
             var query = "INSERT INTO newTable (first_name)"
             answer.query(query, function (err, res) {
