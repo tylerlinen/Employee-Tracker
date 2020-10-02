@@ -1,7 +1,7 @@
 const connection = require("./connection")
 
 class DB {
-    constructor(connection){
+    constructor(connection) {
         this.connection = connection
     }
 
@@ -9,16 +9,32 @@ class DB {
         return this.connection.query("SELECT * FROM employee")
     }
 
-    findAllDepartments(){
+    findAllDepartments() {
         return this.connection.query("SELECT * FROM department")
     }
-    findAllRoles(){
+    findAllRoles() {
         return this.connection.query("SELECT * FROM Role")
     }
-    addEmployee(){
-        return this.connection.query("INSERT INTO employee (first_name, last_name, role_id) VALUES (?,?,?)")
-        
+    addEmployee(first_name, last_name, role_id) {
+        return this.connection.query("INSERT INTO employee SET ?", {
+            first_name: first_name,
+            last_name: last_name,
+            role_id: role_id
+        })
     }
+    addRole(title, salary, department_id) {
+        return this.connection.query("INSERT INTO role SET ?", {
+          title: title,
+          salary: salary,
+          department_id: department_id
+        })
+      }
+      addDepartment(department_name) {
+        return this.connection.query("INSERT INTO role SET ?", {
+          department_name: department_name
+        })
+      }
+    
 }
 
 module.exports = new DB(connection);
