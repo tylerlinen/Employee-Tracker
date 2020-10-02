@@ -1,24 +1,24 @@
 var mysql = require("mysql");
 const DB = require("./db/db");
 const { printTable } = require("console-table-printer");
-const { prompt } =  require("inquirer");
+const { prompt } = require("inquirer");
 
 
 function runSearch() {
-        prompt({
-            name: "action",
-            type: "rawlist",
-            message: "What would you like to do?",
-            choices: [
-                "View all employees",
-                "View all departments",
-                "View all roles",
-                "Add employees",
-                "Add departments",
-                "Add roles",
-                "Update employee roles"
-            ]
-        })
+    prompt({
+        name: "action",
+        type: "rawlist",
+        message: "What would you like to do?",
+        choices: [
+            "View all employees",
+            "View all departments",
+            "View all roles",
+            "Add employees",
+            "Add departments",
+            "Add roles",
+            "Update employee roles"
+        ]
+    })
         .then(function (answer) {
             switch (answer.action) {
                 case "View all employees":
@@ -55,37 +55,40 @@ function runSearch() {
 runSearch();
 
 async function viewEmployee() {
-   const employees =  await DB.findAllEmployees();
-   printTable(employees)
-   runSearch();
+    const employees = await DB.findAllEmployees();
+    printTable(employees)
+    runSearch();
 }
 
 async function viewDepartment() {
-   const departments = await DB.findAllDepartments();
-        printTable(departments)
-        runSearch();
-  
+    const departments = await DB.findAllDepartments();
+    printTable(departments)
+    runSearch();
+
 }
 async function viewRoles() {
     const roles = await DB.findAllRoles();
-         printTable(roles)
-         runSearch();
+    printTable(roles)
+    runSearch();
+}
 
-async function addEmployee() {
-   prompt([{
+    async function addEmployee() {
+        prompt([{
             name: "firstName",
             type: "Input",
             message: "Enter first name",
-        },
-    ])
-        .then(function (answer) {
-            var query = "INSERT INTO newTable (first_name)"
-            answer.query(query, function (err, res) {
-                for (var i = 0; i < res.length; i++) {
-                    console.log(res[i]);
-                }
-            })
-
-        });
-}
-
+        }, {
+            name: "lastName",
+            type: "Input",
+            message: "Enter last name",
+        }, {
+            name: "roleID",
+            type: "list",
+            message: "Choose the employees role",
+            choices: ["Software Engineer", "Singer", "Salesperson"]
+        }
+        ])
+        const addEmployee = await DB.addEmployee();
+        printTable(addEmployee)
+        runSearch()
+    };
