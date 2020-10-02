@@ -24,5 +24,3 @@ manager_id INT(30),
 PRIMARY KEY (id)
 );
 
-ALTER TABLE employee
-ADD FOREIGN KEY (manager_id) REFERENCES role(department_id);
