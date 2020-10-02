@@ -30,7 +30,7 @@ class DB {
         })
       }
       addDepartment(department_name) {
-        return this.connection.query("INSERT INTO role SET ?", {
+        return this.connection.query("INSERT INTO department SET ?", {
           department_name: department_name
         })
       }

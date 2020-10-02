@@ -154,7 +154,7 @@ async function addDepartment() {
         }
     ])
         .then((answers) => {
-            DB.addDepartment(answers.department_name).then(
+            DB.addDepartment(answers.title).then(
                 function (response) {
                     console.log(response);
                     runSearch()
