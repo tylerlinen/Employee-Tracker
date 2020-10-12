@@ -16,7 +16,8 @@ function runSearch() {
             "Add employees",
             "Add departments",
             "Add roles",
-            "Update employee roles"
+            "Update employee roles",
+            "Delete employee"
         ]
     })
         .then(function (answer) {
@@ -46,7 +47,11 @@ function runSearch() {
                     break;
 
                 case "Update employee roles":
-                    updateEmployee();
+                    updateEmployeeRole();
+                    break;
+
+                case "Delete employee":
+                    deleteEmployee();
                     break;
             }
 
@@ -162,3 +167,62 @@ async function addDepartment() {
             );
         });
 };
+async function updateEmployeeRole() {
+    const employees = await DB.findAllEmployees();
+    const employeeArray = employees.map(({ id, first_name, last_name }) => (
+        {
+            name: `${first_name} ${last_name}`,
+            value: id
+
+        }))
+
+    const { employee_id } = await prompt([
+        {
+            type: 'list',
+            name: 'employee_id',
+            message: 'Which employee would you like to promote',
+            choices: employeeArray
+        }
+    ])
+
+    const roles = await DB.findAllRoles();
+    const rolesArray = roles.map(({id, title}) => ({
+        name: title,
+        value: id
+    }));
+    const { role_id } = await prompt([
+        {
+            type: 'list',
+            name: 'role_id',
+            message: 'Which role would you like to assign to this employee',
+            choices: rolesArray
+        }
+    ])
+
+
+    await DB.updateEmployeeRole(employee_id, role_id);
+    runSearch()
+};
+
+async function deleteEmployee() {
+    const employees = await DB.findAllEmployees();
+    const employeeArray = employees.map(({ id, first_name, last_name }) => (
+        {
+            name: `${first_name} ${last_name}`,
+            value: id
+
+        }))
+
+    const { employee_id } = await prompt([
+        {
+            type: 'list',
+            name: 'employee_id',
+            message: 'Which employee would you like to delete',
+            choices: employeeArray
+        }
+    ])
+
+    await DB.deleteEmployee(employee_id);
+    viewEmployee();
+}
+
